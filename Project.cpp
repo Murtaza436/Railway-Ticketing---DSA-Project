@@ -53,3 +53,89 @@ string BookedID;
 int currentID;
 trains availTrains[10];
 int noOfTrains = 5;
+
+void Payment()
+{
+    string cc, cvv, dob, payChoice;
+    string accNum, accHolderFName, accHolderLName;
+    cout << endl
+         << endl;
+    cout << "\n\n\t\t\t\t\t===============PAYMENT DETAILS===============" << endl;
+    cout << "\t\t\t\t\tChoose Payment Method. \n";
+    cout << "\t\t\t\t\t1. JazzCash. \n";
+    cout << "\t\t\t\t\t2. EasyPaisa. \n";
+    cout << "\t\t\t\t\t3. Credit/Debit Card. \n";
+    cout << "\n\n\t\t\t\t\tEnter Choice (1-3): ";
+    cin >> payChoice;
+
+    if (payChoice == "1")
+    {
+        while (true)
+        {
+            cout << "\n\n\t\t\t\t\tEnter JazzCash Mobile Account Number: ";
+            cin >> accNum;
+            if (accNum.length() != 11)
+            {
+                cout << endl;
+                cout << "\n\n\t\t\t\t\tEnter a Valid 11 Digit Mobile Phone Number!" << endl
+                     << endl;
+            }
+            else
+            {
+                break; // Valid input, exit the loop
+            }
+        }
+
+        cout << "\t\t\t\t\tEnter Account Holder's First Name: ";
+        cin >> accHolderFName;
+        cout << "\t\t\t\t\tEnter Account Holder's Last Name: ";
+        cin >> accHolderLName;
+    }
+    else if (payChoice == "2")
+    {
+        cout << "\n\n\t\t\t\t\tEnter EasyPaisa Mobile Account Number: ";
+        cin >> accNum;
+        cout << "\n\n\t\t\t\t\tEnter Account Holder's First Name: ";
+        cin >> accHolderFName;
+        cout << "\n\n\t\t\t\t\tEnter Account Holder's Last Name: ";
+        cin >> accHolderLName;
+    }
+    else if (payChoice == "3")
+    {
+        while (true)
+        {
+            cout << "\n\n\t\t\t\t\tEnter Credit/Debit Card Number (16 digits): ";
+            cin >> cc;
+            if (cc.length() != 16)
+            {
+                cout << "\n\n\t\t\t\t\tCC number must have a length of 16 only! \n";
+            }
+            else
+            {
+                break; // Valid input, exit the loop
+            }
+        }
+
+        while (true)
+        {
+            cout << "\n\n\t\t\t\t\tEnter CVV (3 digits): ";
+            cin >> cvv;
+            if (cvv.length() != 3)
+            {
+                cout << "\n\n\t\t\t\t\tCVV number must have a length of 3 only! \n";
+            }
+            else
+            {
+                break; // Valid input, exit the loop
+            }
+        }
+
+        cout << "\n\n\t\t\t\t\tEnter Date Of Expiry(DD/MM/YYYY): ";
+        cin >> dob;
+    }
+    else
+    {
+        cout << "\t\t\t\t\tInvalid Choice. Please try again. \n";
+    }
+    cout << "\n\n\t\t\t\t\t";
+}
