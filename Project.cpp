@@ -139,3 +139,38 @@ void Payment()
     }
     cout << "\n\n\t\t\t\t\t";
 }
+
+TrainBST *insertTrain(TrainBST *root, trains t)
+{
+    if (!root)
+    {
+        TrainBST *newNode = new TrainBST();
+        newNode->data = t;
+        newNode->left = newNode->right = NULL;
+        return newNode;
+    }
+    if (t.TName < root->data.TName)
+        root->left = insertTrain(root->left, t);
+    else
+        root->right = insertTrain(root->right, t);
+    return root;
+}
+
+void searchTrainByName(TrainBST *root, string name)
+{
+    if (!root)
+    {
+        cout << "Train not found.\n";
+        return;
+    }
+    if (root->data.TName == name)
+    {
+        cout << "Train Found:\n"
+             << "Name: " << root->data.TName << "\nID: " << root->data.TID << endl;
+        return;
+    }
+    if (name < root->data.TName)
+        searchTrainByName(root->left, name);
+    else
+        searchTrainByName(root->right, name);
+}
