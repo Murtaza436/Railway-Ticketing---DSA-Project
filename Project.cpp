@@ -227,3 +227,110 @@ void iniTrain()
     availTrains[4].TClasses = "Economy, AC Lower, AC Business";
     availTrains[4].TSeats = 30;
 }
+void removeTicket(int remTicket)
+{
+    node *prev = head;
+    node *delNode = head;
+    bool found = false;
+
+    // Find and remove the ticket
+    while (delNode != NULL)
+    {
+        if (delNode->ticketID == remTicket)
+        {
+            found = true;
+            break;
+        }
+        prev = delNode;
+        delNode = delNode->next;
+    }
+
+    if (!found)
+    {
+        cout << "Ticket ID Not Found!\n";
+        return;
+    }
+
+    // Unlink the node
+    if (delNode == head)
+    {
+        head = head->next;
+    }
+    else
+    {
+        prev->next = delNode->next;
+    }
+    if (delNode == tail)
+    {
+        tail = prev;
+    }
+
+    cout << "\t\t\t\t\tDeleted Ticket ID: " << remTicket << "\n";
+
+    // Update Seat_Details.txt
+    fstream Seat("Seat_Details.txt");
+    SeatRecord Seats[10];
+    string line;
+    int i = 0;
+
+    while (getline(Seat, line))
+    {
+        size_t delimit = line.find('-');
+        Seats[i].RowA = line.substr(0, delimit);
+        size_t nextDelimit = line.find('-', delimit + 1);
+        Seats[i].RowB = line.substr(delimit + 1, nextDelimit - delimit - 1);
+        Seats[i].RowC = line.substr(nextDelimit + 1);
+        i++;
+    }
+    Seat.close();
+
+    // Restore the seat
+    // Extract seat row and number, converting row to uppercase
+    string seatRow = delNode->BookedSeatNum.substr(0);
+    string seatNum = delNode->BookedSeatNum.substr(1);
+
+    // Restore seat in Seat_Details.txt
+    for (int j = 0; j < 10; j++)
+    {
+        if (seatRow == "A" && Seats[j].RowA == "XX")
+        {
+            Seats[j].RowA = seatNum;
+        }
+        if (seatRow == "B" && Seats[j].RowB == "XX")
+        {
+            Seats[j].RowB = seatNum;
+        }
+        if (seatRow == "C" && Seats[j].RowC == "XX")
+        {
+            Seats[j].RowC = seatNum;
+        }
+    }
+
+    // Save back to Seat_Details.txt
+    ofstream Del("Seat_Details.txt", ios::trunc);
+    for (int j = 0; j < 10; j++)
+    {
+        Del << Seats[j].RowA << "-" << Seats[j].RowB << "-" << Seats[j].RowC << "-\n";
+    }
+    Del.close();
+
+    // Update Tickets.txt
+    ofstream outFile("Tickets.txt", ios::trunc);
+    node *temp = head;
+
+    while (temp != NULL)
+    {
+        outFile << temp->ticketID << "," << temp->Name << "," << temp->Age << ","
+                << temp->NIC << "," << temp->Contact << ","
+                << temp->BookedTName << "," << temp->BookedTID << ","
+                << temp->BookedDest << "," << temp->BookedSource << ","
+                << temp->BookedDate << "," << temp->DeptTime << ","
+                << temp->ArrTime << "," << temp->BookedSeatNum << ","
+                << temp->Price << "," << temp->BookedClass << "\n";
+        temp = temp->next;
+    }
+    outFile.close();
+
+    delete delNode;
+    cout << "Debug: Tickets and seat details updated after deletion.\n";
+}
