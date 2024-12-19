@@ -230,3 +230,62 @@ void display()
     else
         cout << "List is empty, nothing to display. \n";
 }
+
+void viewTicket()
+{
+    int search;
+    string choice;
+    bool found = false;
+    node *temp = head;
+
+    cout << "\n\n\t\t\t\t\tDo You Want to View Most Recent Booking? If so, Press 1\n";
+    cout << "\t\t\t\t\tDo You Want to Search an Older Booking? If so, Press 2\n";
+    cout << "\t\t\t\t\tEnter Choice (1-2): ";
+    cin >> choice;
+
+    if (choice == "1")
+    {
+        search = currentID;
+    }
+    else if (choice == "2")
+    {
+        cout << "\t\t\t\t\tEnter Your Booking ID: ";
+        cin >> search;
+    }
+    else
+    {
+        cout << "\t\t\t\t\tInvalid input. Retry! \n";
+        return;
+    }
+
+    while (temp != NULL)
+    {
+        if (temp->ticketID == search)
+        {
+            found = true;
+            cout << "\t\t\t\t\tBooking ID: " << temp->ticketID << endl;
+            cout << "\t\t\t\t\tName: " << temp->Name << endl;
+            cout << "\t\t\t\t\tAge: " << temp->Age << endl;
+            cout << "\t\t\t\t\tNIC: " << temp->NIC << endl;
+            cout << "\t\t\t\t\tContact: " << temp->Contact << endl;
+            cout << "\t\t\t\t\tTrain ID: " << temp->BookedTID << endl;
+            cout << "\t\t\t\t\tTrain Name: " << temp->BookedTName << endl;
+            cout << "\t\t\t\t\tTrain Class: " << temp->BookedClass << endl;
+            cout << "\t\t\t\t\tSeat Number: " << temp->BookedSeatNum << endl;
+            cout << "\t\t\t\t\tDate of Booking: " << temp->BookedDate << endl;
+            cout << "\t\t\t\t\tSource: " << temp->BookedSource << endl;
+            cout << "\t\t\t\t\tDestination: " << temp->BookedDest << endl;
+            cout << "\t\t\t\t\tDeparture Time: " << temp->DeptTime << endl;
+            cout << "\t\t\t\t\tArrival Time: " << temp->ArrTime << endl;
+            cout << endl;
+            break;
+        }
+        temp = temp->next;
+    }
+
+    if (!found)
+    {
+        cout << "\t\t\t\t\tNo Matching Booking Found.\n";
+    }
+}
+
