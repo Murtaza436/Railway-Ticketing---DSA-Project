@@ -195,3 +195,38 @@ void saveTicketToFile(node *ticket)
         cout << "Error: Unable to save ticket to file.\n";
     }
 }
+void display()
+{
+    cout << endl
+         << endl
+         << endl
+         << endl
+         << endl;
+    if (head != NULL && tail != NULL)
+    {
+        cout << "\t\t\t\t\tList is as follows: \n";
+        node *temp = head;
+        do
+        {
+            cout << "\t\t\t\t\tTicket ID: " << temp->ticketID << endl;
+            cout << "\t\t\t\t\tName: " << temp->Name << endl;
+            cout << "\t\t\t\t\tAge: " << temp->Age << endl;
+            cout << "\t\t\t\t\tNIC: " << temp->NIC << endl;
+            cout << "\t\t\t\t\tContact: " << temp->Contact << endl;
+            cout << "\t\t\t\t\tTrain ID: " << temp->BookedTID << endl;
+            cout << "\t\t\t\t\tTrain Name: " << temp->BookedTName << endl;
+            cout << "\t\t\t\t\tTrain Class: " << temp->BookedClass << endl;
+            cout << "\t\t\t\t\tSeat Number: " << temp->BookedSeatNum << endl;
+            cout << "\t\t\t\t\tDate of Booking: " << temp->BookedDate << endl;
+            cout << "\t\t\t\t\tSource: " << temp->BookedSource << endl;
+            cout << "\t\t\t\t\tDestination: " << temp->BookedDest << endl;
+            cout << "\t\t\t\t\tDeparture TIme: " << temp->DeptTime << endl;
+            cout << "\t\t\t\t\tArrival Time: " << temp->ArrTime << endl;
+            cout << endl;
+            temp = temp->next;
+        } while (temp);
+        Sleep(1000);
+    }
+    else
+        cout << "List is empty, nothing to display. \n";
+}
