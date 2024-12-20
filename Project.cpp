@@ -360,4 +360,72 @@ void trainPrice()
         Class = "AC Business [Bed Included]";
     }
 }
+void admin()
+{
+    string choice, user, password;
+    system("cls");
+    cin.clear();
+    cout << endl
+         << endl
+         << endl
+         << endl
+         << endl;
+    cout << "\t\t\t\t\tWELCOME TO ADMIN PORTAL!\n\n";
+
+    cout << "\t\t\t\t\tEnter your login credentials below! \n";
+
+    while (true)
+    {
+        cout << "\t\t\t\t\tEnter your Username: ";
+        cin >> user;
+        cout << "\t\t\t\t\tEnter your Password: ";
+        cin >> password;
+
+        if ((user == "MURTAZA" && password == "SMS123") ||
+            (user == "ASHIR" && password == "ASH123") ||
+            (user == "MUQEEM" && password == "MUQ123"))
+        {
+            cout << "\t\t\t\t\tLogged in Successfully!\n";
+            cin.clear();
+            system("cls");
+            cout << endl
+                 << endl
+                 << endl
+                 << endl
+                 << endl;
+            cout << "\t\t\t\t\tSelect 1 to View all Booked Tickets. \n";
+            cout << "\t\t\t\t\tSelect 2 to add Trains. \n";
+            cout << "\t\t\t\t\tSelect 3 to Exit\n";
+
+            do
+            {
+                cout << "\t\t\t\t\tEnter Choice To Proceed (1-3): ";
+                cin >> choice;
+                if (choice == "1")
+                    display();
+                else if (choice == "2")
+                {
+                    cin.clear();
+                    addTrains();
+                    if (trainCheck == false)
+                        trainFill();
+                }
+                else if (choice == "3")
+                {
+                    system("cls");
+                    main();
+                    return;
+                }
+                else
+                    cout << "\t\t\t\t\tEnter correct choice. Try again. \n";
+
+            } while (choice != "3");
+            break;
+        }
+        else
+        {
+            cout << "\t\t\t\t\tInvalid credentials. Please login again.\n";
+        }
+    }
+}
 
