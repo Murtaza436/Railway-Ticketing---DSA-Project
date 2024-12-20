@@ -294,6 +294,136 @@ string SeatChoose()
     return FinalSeatNum;
 }
 
+void reserveTicket()
+{
+    string fName, lName;
+    node *obj = new node();
+    node *temp = tail;
+
+    // Link the new node regardless of head and tail status
+    if (head == NULL && tail == NULL)
+    {
+        head = obj;
+        tail = obj;
+    }
+    else
+    {
+        tail->next = obj;
+        tail = obj;
+    }
+
+    cout << endl
+         << endl
+         << endl
+         << endl
+         << endl;
+    cout << "\t\t\t\t\tEnter First Name of Passenger: ";
+    cin >> fName;
+    cout << "\t\t\t\t\tEnter Last Name of Passenger: ";
+    cin >> lName;
+    Name = fName + " " + lName;
+
+    cout << "\t\t\t\t\tEnter Age: ";
+    cin >> Age;
+
+    // Check for valid CNIC number
+    do
+    {
+        cout << "\t\t\t\t\tEnter CNIC Number: ";
+        cin >> NIC;
+        if (NIC.length() != 13)
+        {
+            cout << "\n\t\t\t\t\tEnter a Valid 13 digit CNIC Number!" << endl;
+        }
+    } while (NIC.length() != 13);
+
+    // Check for valid contact number
+    do
+    {
+        cout << "\t\t\t\t\tEnter Contact Number: ";
+        cin >> Contact;
+        if (Contact.length() != 11)
+        {
+            cout << "\n\t\t\t\t\tEnter a Valid 11 digit Mobile Phone Number!" << endl;
+        }
+    } while (Contact.length() != 11);
+
+    // Call trainFill function
+    trainFill();
+    // Assign train and booking details
+    obj->BookedTID = BookedID;
+    obj->BookedTName = TName;
+    obj->DeptTime = DTime;
+    obj->ArrTime = ATime;
+    obj->BookedDate = Date;
+
+    // After trainFill
+    // cout << "Debug: Reservation Details -> Name: " << Name
+    //      << ", Age: " << Age
+    //      << ", NIC: " << NIC
+    //      << ", Contact: " << Contact
+    //      << ", Train Name: " << TName
+    //      << ", Train ID: " << BookedID
+    //      << ", Date: " << Date
+    //      << ", Departure: " << DTime
+    //      << ", Arrival: " << ATime << endl;
+
+    // Call trainPrice function
+    trainPrice();
+
+    // Choose seat
+    SeatNum = SeatChoose();
+
+    // Call Payment function
+    Payment();
+
+    system("cls");
+
+    cout << "\n\n\t\t\t\t\t Your payment is successfully processed!" << endl;
+    cout << "\t\t\t\t\t PKR " << Price << " has been deducted from your Account." << endl;
+
+    srand(time(0));
+
+    // Randomly Generated Ticket ID:
+    obj->ticketID = (rand());
+    cout << endl
+         << endl;
+    cout << "\t\t\t\t\tTicket Generated! Your ID is: " << obj->ticketID << endl;
+    currentID = obj->ticketID;
+
+    // Assign passenger details
+    obj->Name = Name;
+    obj->Age = Age;
+    obj->NIC = NIC;
+    obj->Contact = Contact;
+
+    // Assign train and booking details
+    obj->BookedTID = BookedID;
+    obj->BookedSource = Source; // Correct assignment
+    obj->BookedDest = Dest;     // Correct assignment
+    obj->BookedDate = Date;
+    obj->BookedTName = TName;
+    obj->DeptTime = DTime;
+    obj->ArrTime = ATime;
+    obj->BookedSeatNum = SeatNum;
+    obj->Price = Price;
+    obj->BookedClass = Class;
+
+    cout << endl
+         << endl;
+
+    cout << "Ticket Reserved! ID: " << obj->ticketID
+         << ", Name: " << obj->Name
+         << ", Price: " << obj->Price << endl;
+    cout << "Debug: Ticket Reserved -> Name: " << obj->Name
+         << ", Age: " << obj->Age << ", NIC: " << obj->NIC
+         << ", Contact: " << obj->Contact << endl;
+
+    cout << "Ticket Reserved for Train: " << obj->BookedTName << endl;
+
+    saveTicketToFile(obj);
+}
+
 void display()
 {
     cout << endl
