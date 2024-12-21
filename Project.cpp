@@ -195,6 +195,284 @@ void saveTicketToFile(node *ticket)
         cout << "Error: Unable to save ticket to file.\n";
     }
 }
+
+string SeatChoose()
+{
+    fstream Seat;
+    int count = 0;
+    string line;
+    SeatRecord Seats[10];
+    Seat.open("Seat_Details.txt");
+    while (getline(Seat, line))
+    {
+        count++;
+    }
+    Seat.close();
+    Seat.open("Seat_Details.txt");
+    for (int j = 0; j < count; j++)
+    {
+        string line1;
+        getline(Seat, line1);
+        size_t delimit = line1.find('-');
+        Seats[j].RowA = line1.substr(0, delimit);
+        size_t nextDelimit = line1.find('-', delimit + 1);
+        Seats[j].RowB = line1.substr(delimit + 1, nextDelimit - delimit - 1);
+        Seats[j].RowC = line1.substr(nextDelimit + 1);
+    }
+    Seat.close();
+
+    string RowName, SeatNum, FinalSeatNum;
+    bool Flag = false;
+    cout << "\n\n\t\t\t\t\t\t\tA" << "\t" << " B" << "\t" << " C" << "\t\n";
+    for (int i = 0; i < 10; i++)
+    {
+        cout << "\n\n\t\t\t\t\t\t\t" << Seats[i].RowA << "\t" << Seats[i].RowB << "\t" << Seats[i].RowC << "\t\n";
+    }
+
+    cout << "\n\n\t\t\t\t\t\t  ======================================\n";
+
+    while (true)
+    {
+        cout << "\n\n\t\t\t\t\tEnter the row name that you chose: ";
+        cin >> RowName;
+        if (RowName != "A" && RowName != "B" && RowName != "C")
+        {
+            cout << "\n\n\t\t\t\t\tInvalid row, please try again. ";
+        }
+        else
+            break;
+    }
+
+    while (true)
+    {
+        cout << "\n\n\t\t\t\t\tEnter the seat number that you chose: ";
+        cin >> SeatNum;
+        if (SeatNum == "XX")
+        {
+            cout << "\n\n\t\t\t\t\tInvalid seat, please try again! \n";
+            continue;
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            if (RowName == "A" && SeatNum == Seats[i].RowA)
+            {
+                Seats[i].RowA = "XX"; // Mark seat as reserved
+                Flag = true;
+                cout << "Debug: Reserved Seat A" << SeatNum << endl;
+            }
+            else if (RowName == "B" && SeatNum == Seats[i].RowB)
+            {
+                Seats[i].RowB = "XX";
+                Flag = true;
+                cout << "Debug: Reserved Seat B" << SeatNum << endl;
+            }
+            else if (RowName == "C" && SeatNum == Seats[i].RowC)
+            {
+                Seats[i].RowC = "XX";
+                Flag = true;
+                cout << "Debug: Reserved Seat C" << SeatNum << endl;
+            }
+        }
+
+        if (Flag)
+            break;
+        else
+            cout << "\n\n\t\t\t\t\tSeat number not found, please try again. \n";
+    }
+
+    FinalSeatNum = RowName + SeatNum;
+    ofstream Del("Seat_Details.txt", ios::trunc);
+    for (int i = 0; i < 10; i++)
+    {
+        Del << Seats[i].RowA << "-" << Seats[i].RowB << "-" << Seats[i].RowC << "-\n";
+    }
+    Del.close();
+    cout << "Debug: Seat details file updated.\n";
+
+    Del.close();
+    return FinalSeatNum;
+}
+
+void reserveTicket()
+{
+    string fName, lName;
+    node *obj = new node();
+    node *temp = tail;
+
+    // Link the new node regardless of head and tail status
+    if (head == NULL && tail == NULL)
+    {
+        head = obj;
+        tail = obj;
+    }
+    else
+    {
+        tail->next = obj;
+        tail = obj;
+    }
+
+    cout << endl
+         << endl
+         << endl
+         << endl
+         << endl;
+    cout << "\t\t\t\t\tEnter First Name of Passenger: ";
+    cin >> fName;
+    cout << "\t\t\t\t\tEnter Last Name of Passenger: ";
+    cin >> lName;
+    Name = fName + " " + lName;
+
+    cout << "\t\t\t\t\tEnter Age: ";
+    cin >> Age;
+
+    // Check for valid CNIC number
+    do
+    {
+        cout << "\t\t\t\t\tEnter CNIC Number: ";
+        cin >> NIC;
+        if (NIC.length() != 13)
+        {
+            cout << "\n\t\t\t\t\tEnter a Valid 13 digit CNIC Number!" << endl;
+        }
+    } while (NIC.length() != 13);
+
+    // Check for valid contact number
+    do
+    {
+        cout << "\t\t\t\t\tEnter Contact Number: ";
+        cin >> Contact;
+        if (Contact.length() != 11)
+        {
+            cout << "\n\t\t\t\t\tEnter a Valid 11 digit Mobile Phone Number!" << endl;
+        }
+    } while (Contact.length() != 11);
+
+    // Call trainFill function
+    trainFill();
+    // Assign train and booking details
+    obj->BookedTID = BookedID;
+    obj->BookedTName = TName;
+    obj->DeptTime = DTime;
+    obj->ArrTime = ATime;
+    obj->BookedDate = Date;
+
+    // After trainFill
+    // cout << "Debug: Reservation Details -> Name: " << Name
+    //      << ", Age: " << Age
+    //      << ", NIC: " << NIC
+    //      << ", Contact: " << Contact
+    //      << ", Train Name: " << TName
+    //      << ", Train ID: " << BookedID
+    //      << ", Date: " << Date
+    //      << ", Departure: " << DTime
+    //      << ", Arrival: " << ATime << endl;
+
+    // Call trainPrice function
+    trainPrice();
+
+    // Choose seat
+    SeatNum = SeatChoose();
+
+    // Call Payment function
+    Payment();
+
+    system("cls");
+
+    cout << "\n\n\t\t\t\t\t Your payment is successfully processed!" << endl;
+    cout << "\t\t\t\t\t PKR " << Price << " has been deducted from your Account." << endl;
+
+    srand(time(0));
+
+    // Randomly Generated Ticket ID:
+    obj->ticketID = (rand());
+    cout << endl
+         << endl;
+    cout << "\t\t\t\t\tTicket Generated! Your ID is: " << obj->ticketID << endl;
+    currentID = obj->ticketID;
+
+    // Assign passenger details
+    obj->Name = Name;
+    obj->Age = Age;
+    obj->NIC = NIC;
+    obj->Contact = Contact;
+
+    // Assign train and booking details
+    obj->BookedTID = BookedID;
+    obj->BookedSource = Source; // Correct assignment
+    obj->BookedDest = Dest;     // Correct assignment
+    obj->BookedDate = Date;
+    obj->BookedTName = TName;
+    obj->DeptTime = DTime;
+    obj->ArrTime = ATime;
+    obj->BookedSeatNum = SeatNum;
+    obj->Price = Price;
+    obj->BookedClass = Class;
+
+    cout << endl
+         << endl;
+
+    cout << "Ticket Reserved! ID: " << obj->ticketID
+         << ", Name: " << obj->Name
+         << ", Price: " << obj->Price << endl;
+    cout << "Debug: Ticket Reserved -> Name: " << obj->Name
+         << ", Age: " << obj->Age << ", NIC: " << obj->NIC
+         << ", Contact: " << obj->Contact << endl;
+
+    cout << "Ticket Reserved for Train: " << obj->BookedTName << endl;
+
+    saveTicketToFile(obj);
+}
+
+
+void loadTicketsFromFile()
+{
+    ifstream inFile("Tickets.txt");
+    if (!inFile.is_open())
+    {
+        cout << "No previously saved tickets found.\n";
+        return;
+    }
+
+    string line;
+    while (getline(inFile, line))
+    {
+        stringstream ss(line);
+        node *ticket = new node();
+
+        getline(ss, line, ',');
+        ticket->ticketID = stoi(line);           // Ticket ID
+        getline(ss, ticket->Name, ',');          // Name
+        getline(ss, ticket->Age, ',');           // Age
+        getline(ss, ticket->NIC, ',');           // NIC
+        getline(ss, ticket->Contact, ',');       // Contact
+        getline(ss, ticket->BookedTName, ',');   // Train Name
+        getline(ss, ticket->BookedTID, ',');     // Train ID
+        getline(ss, ticket->BookedSource, ',');  // Source
+        getline(ss, ticket->BookedDest, ',');    // Destination
+        getline(ss, ticket->BookedDate, ',');    // Date of Booking
+        getline(ss, ticket->DeptTime, ',');      // Departure Time
+        getline(ss, ticket->ArrTime, ',');       // Arrival Time
+        getline(ss, ticket->BookedSeatNum, ','); // Seat Number
+        getline(ss, line, ',');
+        ticket->Price = stof(line);            // Price
+        getline(ss, ticket->BookedClass, ','); // Train Class
+
+        // Add the ticket to linked list
+        if (head == NULL)
+        {
+            head = ticket;
+            tail = ticket;
+        }
+        else
+        {
+            tail->next = ticket;
+            tail = ticket;
+        }
+    }
+    inFile.close();
+}
+
 void display()
 {
     cout << endl
