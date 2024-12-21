@@ -213,27 +213,6 @@ void searchTrainByName(TrainBST *root, string name)
     else
         searchTrainByName(root->right, name);
 }
-void saveTicketToFile(node *ticket)
-{
-    ofstream outFile("Tickets.txt", ios::app);
-    if (outFile.is_open())
-    {
-        outFile << ticket->ticketID << "," << ticket->Name << "," << ticket->Age << ","
-                << ticket->NIC << "," << ticket->Contact << ","
-                << ticket->BookedTName << "," << ticket->BookedTID << ","
-                << ticket->BookedSource << "," << ticket->BookedDest << ","
-                << ticket->BookedDate << "," << ticket->DeptTime << ","
-                << ticket->ArrTime << "," << ticket->BookedSeatNum << ","
-                << ticket->Price << "," << ticket->BookedClass << "\n";
-
-        outFile.close();
-        cout << "Debug: Ticket saved to file.\n";
-    }
-    else
-    {
-        cout << "Error: Unable to save ticket to file.\n";
-    }
-}
 
 string SeatChoose()
 {
@@ -333,185 +312,80 @@ string SeatChoose()
     return FinalSeatNum;
 }
 
-void reserveTicket()
+void iniTrain()
 {
-    string fName, lName;
-    node *obj = new node();
-    node *temp = tail;
+    availTrains[0].TName = "Shalimar Express";
+    availTrains[0].TID = "SHE753";
+    availTrains[0].TSource = "Karachi";
+    availTrains[0].TDest = "Lahore";
+    availTrains[0].TDate = "24-Dec-2020";
+    availTrains[0].arriveTime = "20:00 (8:00 PM)";
+    availTrains[0].departTime = "16:40 (4:40 PM)";
+    availTrains[0].TClasses = "Economy, AC Lower, AC Business";
+    availTrains[0].TSeats = 30;
 
-    // Link the new node regardless of head and tail status
-    if (head == NULL && tail == NULL)
+    availTrains[1].TName = "Karakoram Express";
+    availTrains[1].TID = "KKE694";
+    availTrains[1].TSource = "Karachi";
+    availTrains[1].TDest = "Faisalabad";
+    availTrains[1].TDate = "26-Dec-2020";
+    availTrains[1].arriveTime = "08:00 (8:00 AM)";
+    availTrains[1].departTime = "04:40 (4:40 AM)";
+    availTrains[1].TClasses = "Economy, AC Lower, AC Business";
+    availTrains[1].TSeats = 30;
+
+    availTrains[2].TName = "Green Line Express";
+    availTrains[2].TID = "GLE400";
+    availTrains[2].TSource = "Karachi";
+    availTrains[2].TDest = "Islamabad";
+    availTrains[2].TDate = "05-Jan-2021";
+    availTrains[2].arriveTime = "12:00 (12:00 PM)";
+    availTrains[2].departTime = "10:00 (10:00 AM)";
+    availTrains[2].TClasses = "Economy, AC Lower, AC Business";
+    availTrains[2].TSeats = 30;
+
+    availTrains[3].TName = "Tezgam Express";
+    availTrains[3].TID = "TEZ123";
+    availTrains[3].TSource = "Karachi";
+    availTrains[3].TDest = "Faisalabad";
+    availTrains[3].TDate = "01-Jan-2021";
+    availTrains[3].arriveTime = "15:00 (03:00 PM)";
+    availTrains[3].departTime = "9:00 (09:00 AM)";
+    availTrains[3].TClasses = "Economy, AC Lower, AC Business";
+    availTrains[3].TSeats = 30;
+
+    availTrains[4].TName = "Karachi Express";
+    availTrains[4].TID = "KHE123";
+    availTrains[4].TSource = "Karachi";
+    availTrains[4].TDest = "Lahore";
+    availTrains[4].TDate = "31-Dec-2000";
+    availTrains[4].arriveTime = "12:00 (12:00 AM)";
+    availTrains[4].departTime = "12:00 (09:00 PM)";
+    availTrains[4].TClasses = "Economy, AC Lower, AC Business";
+    availTrains[4].TSeats = 30;
+}
+
+void saveTicketToFile(node *ticket)
+{
+    ofstream outFile("Tickets.txt", ios::app);
+    if (outFile.is_open())
     {
-        head = obj;
-        tail = obj;
+        outFile << ticket->ticketID << "," << ticket->Name << "," << ticket->Age << ","
+                << ticket->NIC << "," << ticket->Contact << ","
+                << ticket->BookedTName << "," << ticket->BookedTID << ","
+                << ticket->BookedSource << "," << ticket->BookedDest << ","
+                << ticket->BookedDate << "," << ticket->DeptTime << ","
+                << ticket->ArrTime << "," << ticket->BookedSeatNum << ","
+                << ticket->Price << "," << ticket->BookedClass << "\n";
+
+        outFile.close();
+        cout << "Debug: Ticket saved to file.\n";
     }
     else
     {
-        tail->next = obj;
-        tail = obj;
+        cout << "Error: Unable to save ticket to file.\n";
     }
-
-    cout << endl
-         << endl
-         << endl
-         << endl
-         << endl;
-    cout << "\t\t\t\t\tEnter First Name of Passenger: ";
-    cin >> fName;
-    cout << "\t\t\t\t\tEnter Last Name of Passenger: ";
-    cin >> lName;
-    Name = fName + " " + lName;
-
-    cout << "\t\t\t\t\tEnter Age: ";
-    cin >> Age;
-
-    // Check for valid CNIC number
-    do
-    {
-        cout << "\t\t\t\t\tEnter CNIC Number: ";
-        cin >> NIC;
-        if (NIC.length() != 13)
-        {
-            cout << "\n\t\t\t\t\tEnter a Valid 13 digit CNIC Number!" << endl;
-        }
-    } while (NIC.length() != 13);
-
-    // Check for valid contact number
-    do
-    {
-        cout << "\t\t\t\t\tEnter Contact Number: ";
-        cin >> Contact;
-        if (Contact.length() != 11)
-        {
-            cout << "\n\t\t\t\t\tEnter a Valid 11 digit Mobile Phone Number!" << endl;
-        }
-    } while (Contact.length() != 11);
-
-    // Call trainFill function
-    trainFill();
-    // Assign train and booking details
-    obj->BookedTID = BookedID;
-    obj->BookedTName = TName;
-    obj->DeptTime = DTime;
-    obj->ArrTime = ATime;
-    obj->BookedDate = Date;
-
-    // After trainFill
-    // cout << "Debug: Reservation Details -> Name: " << Name
-    //      << ", Age: " << Age
-    //      << ", NIC: " << NIC
-    //      << ", Contact: " << Contact
-    //      << ", Train Name: " << TName
-    //      << ", Train ID: " << BookedID
-    //      << ", Date: " << Date
-    //      << ", Departure: " << DTime
-    //      << ", Arrival: " << ATime << endl;
-
-    // Call trainPrice function
-    trainPrice();
-
-    // Choose seat
-    SeatNum = SeatChoose();
-
-    // Call Payment function
-    Payment();
-
-    system("cls");
-
-    cout << "\n\n\t\t\t\t\t Your payment is successfully processed!" << endl;
-    cout << "\t\t\t\t\t PKR " << Price << " has been deducted from your Account." << endl;
-
-    srand(time(0));
-
-    // Randomly Generated Ticket ID:
-    obj->ticketID = (rand());
-    cout << endl
-         << endl;
-    cout << "\t\t\t\t\tTicket Generated! Your ID is: " << obj->ticketID << endl;
-    currentID = obj->ticketID;
-
-    // Assign passenger details
-    obj->Name = Name;
-    obj->Age = Age;
-    obj->NIC = NIC;
-    obj->Contact = Contact;
-
-    // Assign train and booking details
-    obj->BookedTID = BookedID;
-    obj->BookedSource = Source; // Correct assignment
-    obj->BookedDest = Dest;     // Correct assignment
-    obj->BookedDate = Date;
-    obj->BookedTName = TName;
-    obj->DeptTime = DTime;
-    obj->ArrTime = ATime;
-    obj->BookedSeatNum = SeatNum;
-    obj->Price = Price;
-    obj->BookedClass = Class;
-
-    cout << endl
-         << endl;
-
-    cout << "Ticket Reserved! ID: " << obj->ticketID
-         << ", Name: " << obj->Name
-         << ", Price: " << obj->Price << endl;
-    cout << "Debug: Ticket Reserved -> Name: " << obj->Name
-         << ", Age: " << obj->Age << ", NIC: " << obj->NIC
-         << ", Contact: " << obj->Contact << endl;
-
-    cout << "Ticket Reserved for Train: " << obj->BookedTName << endl;
-
-    saveTicketToFile(obj);
 }
-
-
-void loadTicketsFromFile()
-{
-    ifstream inFile("Tickets.txt");
-    if (!inFile.is_open())
-    {
-        cout << "No previously saved tickets found.\n";
-        return;
-    }
-
-    string line;
-    while (getline(inFile, line))
-    {
-        stringstream ss(line);
-        node *ticket = new node();
-
-        getline(ss, line, ',');
-        ticket->ticketID = stoi(line);           // Ticket ID
-        getline(ss, ticket->Name, ',');          // Name
-        getline(ss, ticket->Age, ',');           // Age
-        getline(ss, ticket->NIC, ',');           // NIC
-        getline(ss, ticket->Contact, ',');       // Contact
-        getline(ss, ticket->BookedTName, ',');   // Train Name
-        getline(ss, ticket->BookedTID, ',');     // Train ID
-        getline(ss, ticket->BookedSource, ',');  // Source
-        getline(ss, ticket->BookedDest, ',');    // Destination
-        getline(ss, ticket->BookedDate, ',');    // Date of Booking
-        getline(ss, ticket->DeptTime, ',');      // Departure Time
-        getline(ss, ticket->ArrTime, ',');       // Arrival Time
-        getline(ss, ticket->BookedSeatNum, ','); // Seat Number
-        getline(ss, line, ',');
-        ticket->Price = stof(line);            // Price
-        getline(ss, ticket->BookedClass, ','); // Train Class
-
-        // Add the ticket to linked list
-        if (head == NULL)
-        {
-            head = ticket;
-            tail = ticket;
-        }
-        else
-        {
-            tail->next = ticket;
-            tail = ticket;
-        }
-    }
-    inFile.close();
-}
-
 void display()
 {
     cout << endl
@@ -666,34 +540,8 @@ void editDetails()
         temp = temp->next;
     }
 
-    delete delNode;
-    cout << "Debug: Tickets and seat details updated after deletion.\n";
-}
-
-void trainPrice()
-{
-    int choice = 0;
-    cout << "\t\t\t\t\tPrices based on classes are as follows: \n";
-    cout << "\t\t\t\t\t1. Economy \t\t 2500 PKR \n";
-    cout << "\t\t\t\t\t2. AC Lower \t\t 3500 PKR \n";
-    cout << "\t\t\t\t\t3. AC Business \t\t 4500 PKR \n\n";
-    cout << "\t\t\t\t\tInput Choice (1-3): ";
-    cin >> choice;
-    if (choice == 1)
-    {
-        Price = 2500;
-        Class = "Economy [No Bed]";
-    }
-    else if (choice == 2)
-    {
-        Price = 3500;
-        Class = "AC Lower [Bed Included]";
-    }
-    else if (choice == 3)
-    {
-        Price = 4500;
-        Class = "AC Business [Bed Included]";
-    }
+    outFile.close();
+    cout << "Debug: Tickets.txt updated after editing.\n";
 }
 void admin()
 {
@@ -763,89 +611,5 @@ void admin()
         }
     }
 }
-    outFile.close();
-    cout << "Debug: Tickets.txt updated after editing.\n";
-}
-string trainFill()
-{
-    bool check = false;
-    bool check2 = false;
-    trainCheck = true;
 
-    // Loop until valid departure and arrival cities are entered
-    while (true)
-    {
-        cout << "\t\t\t\t\tEnter Your Departure City: ";
-        cin >> Source;
-        cin.ignore();
-        cout << "\t\t\t\t\tEnter Your Arrival City: ";
-        cin >> Dest;
-        cin.ignore();
-
-        trainSort();
-
-        cout << "\n\n\t\t\t\t\tAVAILABLE TRAINS ON THAT DAY IN THIS ROUTE ARE AS FOLLOWS (IF ANY): \n\n"
-             << endl;
-
-        for (int i = 0; i < noOfTrains; i++)
-        {
-            if (availTrains[i].TSource == Source && availTrains[i].TDest == Dest)
-            {
-                cout << "\t\t\t\t\tTrain Name: " << availTrains[i].TName << endl;
-                cout << "\t\t\t\t\tTrain ID: " << availTrains[i].TID << endl;
-                cout << "\t\t\t\t\tTrain Source: " << availTrains[i].TSource << endl;
-                cout << "\t\t\t\t\tTrain Destination: " << availTrains[i].TDest << endl;
-                cout << "\t\t\t\t\tTrain Departure Date: " << availTrains[i].TDate << endl;
-                cout << "\t\t\t\t\tTrain Arrival Time: " << availTrains[i].arriveTime << endl;
-                cout << "\t\t\t\t\tTrain Departure Time: " << availTrains[i].departTime << endl;
-                cout << "\t\t\t\t\tAvailable Train Classes: " << availTrains[i].TClasses << endl;
-                cout << "\t\t\t\t\tSeats Available: " << availTrains[i].TSeats << endl;
-                cout << endl
-                     << endl;
-                check = true;
-            }
-        }
-
-        if (!check)
-        {
-            cout << "\t\t\t\t\tNo trains available on this route. Please re-enter your details. \n";
-        }
-        else
-        {
-            break; // Exit the loop if trains are found
-        }
-    }
-
-    // Loop until a valid train ID is entered
-    while (true)
-    {
-        cout << "\t\t\t\t\tInput Train ID that you wish to book: ";
-        cin >> BookedID;
-
-        for (int i = 0; i < noOfTrains; i++)
-        {
-            if (BookedID == availTrains[i].TID)
-            {
-                TName = availTrains[i].TName;
-                DTime = availTrains[i].departTime;
-                ATime = availTrains[i].arriveTime;
-                Date = availTrains[i].TDate;
-                availTrains[i].TSeats--; // Reduce available seats
-
-                cout << "Debug: Selected Train -> Name: " << TName
-                     << ", Date: " << Date
-                     << ", Departure: " << DTime
-                     << ", Arrival: " << ATime << endl;
-
-                check2 = true;
-                return BookedID;
-            }
-        }
-
-        if (!check2)
-        {
-            cout << "\t\t\t\t\tInput correct train ID! \n";
-        }
-    }
-}
 
