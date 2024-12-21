@@ -424,6 +424,55 @@ void reserveTicket()
     saveTicketToFile(obj);
 }
 
+
+void loadTicketsFromFile()
+{
+    ifstream inFile("Tickets.txt");
+    if (!inFile.is_open())
+    {
+        cout << "No previously saved tickets found.\n";
+        return;
+    }
+
+    string line;
+    while (getline(inFile, line))
+    {
+        stringstream ss(line);
+        node *ticket = new node();
+
+        getline(ss, line, ',');
+        ticket->ticketID = stoi(line);           // Ticket ID
+        getline(ss, ticket->Name, ',');          // Name
+        getline(ss, ticket->Age, ',');           // Age
+        getline(ss, ticket->NIC, ',');           // NIC
+        getline(ss, ticket->Contact, ',');       // Contact
+        getline(ss, ticket->BookedTName, ',');   // Train Name
+        getline(ss, ticket->BookedTID, ',');     // Train ID
+        getline(ss, ticket->BookedSource, ',');  // Source
+        getline(ss, ticket->BookedDest, ',');    // Destination
+        getline(ss, ticket->BookedDate, ',');    // Date of Booking
+        getline(ss, ticket->DeptTime, ',');      // Departure Time
+        getline(ss, ticket->ArrTime, ',');       // Arrival Time
+        getline(ss, ticket->BookedSeatNum, ','); // Seat Number
+        getline(ss, line, ',');
+        ticket->Price = stof(line);            // Price
+        getline(ss, ticket->BookedClass, ','); // Train Class
+
+        // Add the ticket to linked list
+        if (head == NULL)
+        {
+            head = ticket;
+            tail = ticket;
+        }
+        else
+        {
+            tail->next = ticket;
+            tail = ticket;
+        }
+    }
+    inFile.close();
+}
+
 void display()
 {
     cout << endl
