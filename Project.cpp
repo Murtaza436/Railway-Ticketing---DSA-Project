@@ -430,6 +430,32 @@ string trainFill()
     }
 }
 
+void trainPrice()
+{
+    int choice = 0;
+    cout << "\t\t\t\t\tPrices based on classes are as follows: \n";
+    cout << "\t\t\t\t\t1. Economy \t\t 2500 PKR \n";
+    cout << "\t\t\t\t\t2. AC Lower \t\t 3500 PKR \n";
+    cout << "\t\t\t\t\t3. AC Business \t\t 4500 PKR \n\n";
+    cout << "\t\t\t\t\tInput Choice (1-3): ";
+    cin >> choice;
+    if (choice == 1)
+    {
+        Price = 2500;
+        Class = "Economy [No Bed]";
+    }
+    else if (choice == 2)
+    {
+        Price = 3500;
+        Class = "AC Lower [Bed Included]";
+    }
+    else if (choice == 3)
+    {
+        Price = 4500;
+        Class = "AC Business [Bed Included]";
+    }
+}
+
 void reserveTicket()
 {
     string fName, lName;
@@ -559,7 +585,6 @@ void reserveTicket()
 
     saveTicketToFile(obj);
 }
-
 
 void loadTicketsFromFile()
 {
@@ -767,31 +792,6 @@ void editDetails()
     cout << "Debug: Tickets and seat details updated after deletion.\n";
 }
 
-void trainPrice()
-{
-    int choice = 0;
-    cout << "\t\t\t\t\tPrices based on classes are as follows: \n";
-    cout << "\t\t\t\t\t1. Economy \t\t 2500 PKR \n";
-    cout << "\t\t\t\t\t2. AC Lower \t\t 3500 PKR \n";
-    cout << "\t\t\t\t\t3. AC Business \t\t 4500 PKR \n\n";
-    cout << "\t\t\t\t\tInput Choice (1-3): ";
-    cin >> choice;
-    if (choice == 1)
-    {
-        Price = 2500;
-        Class = "Economy [No Bed]";
-    }
-    else if (choice == 2)
-    {
-        Price = 3500;
-        Class = "AC Lower [Bed Included]";
-    }
-    else if (choice == 3)
-    {
-        Price = 4500;
-        Class = "AC Business [Bed Included]";
-    }
-}
 void admin()
 {
     string choice, user, password;
@@ -860,8 +860,8 @@ void admin()
         }
     }
 }
-    outFile.close();
-    cout << "Debug: Tickets.txt updated after editing.\n";
+outFile.close();
+cout << "Debug: Tickets.txt updated after editing.\n";
 }
 
 void addRoute(string src, string dest)
@@ -883,5 +883,3 @@ void suggestRoutes(string src)
     }
     cout << endl;
 }
-
-
