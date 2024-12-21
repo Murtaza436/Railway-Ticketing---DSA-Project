@@ -174,163 +174,182 @@ void searchTrainByName(TrainBST *root, string name)
     else
         searchTrainByName(root->right, name);
 }
-
-void iniTrain()
+void saveTicketToFile(node *ticket)
 {
-    availTrains[0].TName = "Shalimar Express";
-    availTrains[0].TID = "SHE753";
-    availTrains[0].TSource = "Karachi";
-    availTrains[0].TDest = "Lahore";
-    availTrains[0].TDate = "24-Dec-2020";
-    availTrains[0].arriveTime = "20:00 (8:00 PM)";
-    availTrains[0].departTime = "16:40 (4:40 PM)";
-    availTrains[0].TClasses = "Economy, AC Lower, AC Business";
-    availTrains[0].TSeats = 30;
-
-    availTrains[1].TName = "Karakoram Express";
-    availTrains[1].TID = "KKE694";
-    availTrains[1].TSource = "Karachi";
-    availTrains[1].TDest = "Faisalabad";
-    availTrains[1].TDate = "26-Dec-2020";
-    availTrains[1].arriveTime = "08:00 (8:00 AM)";
-    availTrains[1].departTime = "04:40 (4:40 AM)";
-    availTrains[1].TClasses = "Economy, AC Lower, AC Business";
-    availTrains[1].TSeats = 30;
-
-    availTrains[2].TName = "Green Line Express";
-    availTrains[2].TID = "GLE400";
-    availTrains[2].TSource = "Karachi";
-    availTrains[2].TDest = "Islamabad";
-    availTrains[2].TDate = "05-Jan-2021";
-    availTrains[2].arriveTime = "12:00 (12:00 PM)";
-    availTrains[2].departTime = "10:00 (10:00 AM)";
-    availTrains[2].TClasses = "Economy, AC Lower, AC Business";
-    availTrains[2].TSeats = 30;
-
-    availTrains[3].TName = "Tezgam Express";
-    availTrains[3].TID = "TEZ123";
-    availTrains[3].TSource = "Karachi";
-    availTrains[3].TDest = "Faisalabad";
-    availTrains[3].TDate = "01-Jan-2021";
-    availTrains[3].arriveTime = "15:00 (03:00 PM)";
-    availTrains[3].departTime = "9:00 (09:00 AM)";
-    availTrains[3].TClasses = "Economy, AC Lower, AC Business";
-    availTrains[3].TSeats = 30;
-
-    availTrains[4].TName = "Karachi Express";
-    availTrains[4].TID = "KHE123";
-    availTrains[4].TSource = "Karachi";
-    availTrains[4].TDest = "Lahore";
-    availTrains[4].TDate = "31-Dec-2000";
-    availTrains[4].arriveTime = "12:00 (12:00 AM)";
-    availTrains[4].departTime = "12:00 (09:00 PM)";
-    availTrains[4].TClasses = "Economy, AC Lower, AC Business";
-    availTrains[4].TSeats = 30;
-}
-void removeTicket(int remTicket)
-{
-    node *prev = head;
-    node *delNode = head;
-    bool found = false;
-
-    // Find and remove the ticket
-    while (delNode != NULL)
+    ofstream outFile("Tickets.txt", ios::app);
+    if (outFile.is_open())
     {
-        if (delNode->ticketID == remTicket)
+        outFile << ticket->ticketID << "," << ticket->Name << "," << ticket->Age << ","
+                << ticket->NIC << "," << ticket->Contact << ","
+                << ticket->BookedTName << "," << ticket->BookedTID << ","
+                << ticket->BookedSource << "," << ticket->BookedDest << ","
+                << ticket->BookedDate << "," << ticket->DeptTime << ","
+                << ticket->ArrTime << "," << ticket->BookedSeatNum << ","
+                << ticket->Price << "," << ticket->BookedClass << "\n";
+
+        outFile.close();
+        cout << "Debug: Ticket saved to file.\n";
+    }
+    else
+    {
+        cout << "Error: Unable to save ticket to file.\n";
+    }
+}
+void display()
+{
+    cout << endl
+         << endl
+         << endl
+         << endl
+         << endl;
+    if (head != NULL && tail != NULL)
+    {
+        cout << "\t\t\t\t\tList is as follows: \n";
+        node *temp = head;
+        do
+        {
+            cout << "\t\t\t\t\tTicket ID: " << temp->ticketID << endl;
+            cout << "\t\t\t\t\tName: " << temp->Name << endl;
+            cout << "\t\t\t\t\tAge: " << temp->Age << endl;
+            cout << "\t\t\t\t\tNIC: " << temp->NIC << endl;
+            cout << "\t\t\t\t\tContact: " << temp->Contact << endl;
+            cout << "\t\t\t\t\tTrain ID: " << temp->BookedTID << endl;
+            cout << "\t\t\t\t\tTrain Name: " << temp->BookedTName << endl;
+            cout << "\t\t\t\t\tTrain Class: " << temp->BookedClass << endl;
+            cout << "\t\t\t\t\tSeat Number: " << temp->BookedSeatNum << endl;
+            cout << "\t\t\t\t\tDate of Booking: " << temp->BookedDate << endl;
+            cout << "\t\t\t\t\tSource: " << temp->BookedSource << endl;
+            cout << "\t\t\t\t\tDestination: " << temp->BookedDest << endl;
+            cout << "\t\t\t\t\tDeparture TIme: " << temp->DeptTime << endl;
+            cout << "\t\t\t\t\tArrival Time: " << temp->ArrTime << endl;
+            cout << endl;
+            temp = temp->next;
+        } while (temp);
+        Sleep(1000);
+    }
+    else
+        cout << "List is empty, nothing to display. \n";
+}
+
+void viewTicket()
+{
+    int search;
+    string choice;
+    bool found = false;
+    node *temp = head;
+
+    cout << "\n\n\t\t\t\t\tDo You Want to View Most Recent Booking? If so, Press 1\n";
+    cout << "\t\t\t\t\tDo You Want to Search an Older Booking? If so, Press 2\n";
+    cout << "\t\t\t\t\tEnter Choice (1-2): ";
+    cin >> choice;
+
+    if (choice == "1")
+    {
+        search = currentID;
+    }
+    else if (choice == "2")
+    {
+        cout << "\t\t\t\t\tEnter Your Booking ID: ";
+        cin >> search;
+    }
+    else
+    {
+        cout << "\t\t\t\t\tInvalid input. Retry! \n";
+        return;
+    }
+
+    while (temp != NULL)
+    {
+        if (temp->ticketID == search)
         {
             found = true;
+            cout << "\t\t\t\t\tBooking ID: " << temp->ticketID << endl;
+            cout << "\t\t\t\t\tName: " << temp->Name << endl;
+            cout << "\t\t\t\t\tAge: " << temp->Age << endl;
+            cout << "\t\t\t\t\tNIC: " << temp->NIC << endl;
+            cout << "\t\t\t\t\tContact: " << temp->Contact << endl;
+            cout << "\t\t\t\t\tTrain ID: " << temp->BookedTID << endl;
+            cout << "\t\t\t\t\tTrain Name: " << temp->BookedTName << endl;
+            cout << "\t\t\t\t\tTrain Class: " << temp->BookedClass << endl;
+            cout << "\t\t\t\t\tSeat Number: " << temp->BookedSeatNum << endl;
+            cout << "\t\t\t\t\tDate of Booking: " << temp->BookedDate << endl;
+            cout << "\t\t\t\t\tSource: " << temp->BookedSource << endl;
+            cout << "\t\t\t\t\tDestination: " << temp->BookedDest << endl;
+            cout << "\t\t\t\t\tDeparture Time: " << temp->DeptTime << endl;
+            cout << "\t\t\t\t\tArrival Time: " << temp->ArrTime << endl;
+            cout << endl;
             break;
         }
-        prev = delNode;
-        delNode = delNode->next;
+        temp = temp->next;
     }
 
     if (!found)
     {
-        cout << "Ticket ID Not Found!\n";
+        cout << "\t\t\t\t\tNo Matching Booking Found.\n";
+    }
+}
+void editDetails()
+{
+    string fName, lName;
+    int search;
+    bool found = false;
+
+    cout << "\t\t\t\t\tEDIT DETAILS:" << endl
+         << endl;
+    cout << "\t\t\t\t\tEnter ticket ID: ";
+    cin >> search;
+
+    node *temp = head;
+
+    while (temp != NULL)
+    {
+        if (temp->ticketID == search)
+        {
+            found = true;
+            cout << "\t\t\t\t\tEnter First Name of Passenger: ";
+            cin >> fName;
+            cout << "\t\t\t\t\tEnter Last Name of Passenger: ";
+            cin >> lName;
+            temp->Name = fName + " " + lName;
+
+            cout << "\t\t\t\t\tEnter Age: ";
+            cin >> temp->Age;
+
+            cout << "\t\t\t\t\tEnter CNIC Number: ";
+            cin >> temp->NIC;
+
+            cout << "\t\t\t\t\tEnter Contact Number: ";
+            cin >> temp->Contact;
+
+            cout << "\n\t\t\t\t\tTicket details updated successfully!" << endl;
+            break;
+        }
+        temp = temp->next;
+    }
+
+    if (!found)
+    {
+        cout << "\n\t\t\t\t\tTicket ID not found!" << endl;
         return;
     }
 
-    // Unlink the node
-    if (delNode == head)
-    {
-        head = head->next;
-    }
-    else
-    {
-        prev->next = delNode->next;
-    }
-    if (delNode == tail)
-    {
-        tail = prev;
-    }
-
-    cout << "\t\t\t\t\tDeleted Ticket ID: " << remTicket << "\n";
-
-    // Update Seat_Details.txt
-    fstream Seat("Seat_Details.txt");
-    SeatRecord Seats[10];
-    string line;
-    int i = 0;
-
-    while (getline(Seat, line))
-    {
-        size_t delimit = line.find('-');
-        Seats[i].RowA = line.substr(0, delimit);
-        size_t nextDelimit = line.find('-', delimit + 1);
-        Seats[i].RowB = line.substr(delimit + 1, nextDelimit - delimit - 1);
-        Seats[i].RowC = line.substr(nextDelimit + 1);
-        i++;
-    }
-    Seat.close();
-
-    // Restore the seat
-    // Extract seat row and number, converting row to uppercase
-    string seatRow = delNode->BookedSeatNum.substr(0);
-    string seatNum = delNode->BookedSeatNum.substr(1);
-
-    // Restore seat in Seat_Details.txt
-    for (int j = 0; j < 10; j++)
-    {
-        if (seatRow == "A" && Seats[j].RowA == "XX")
-        {
-            Seats[j].RowA = seatNum;
-        }
-        if (seatRow == "B" && Seats[j].RowB == "XX")
-        {
-            Seats[j].RowB = seatNum;
-        }
-        if (seatRow == "C" && Seats[j].RowC == "XX")
-        {
-            Seats[j].RowC = seatNum;
-        }
-    }
-
-    // Save back to Seat_Details.txt
-    ofstream Del("Seat_Details.txt", ios::trunc);
-    for (int j = 0; j < 10; j++)
-    {
-        Del << Seats[j].RowA << "-" << Seats[j].RowB << "-" << Seats[j].RowC << "-\n";
-    }
-    Del.close();
-
-    // Update Tickets.txt
+    // Rewrite Tickets.txt with updated linked list
     ofstream outFile("Tickets.txt", ios::trunc);
-    node *temp = head;
+    temp = head; // Reset temp to the head of the list
 
     while (temp != NULL)
     {
         outFile << temp->ticketID << "," << temp->Name << "," << temp->Age << ","
                 << temp->NIC << "," << temp->Contact << ","
                 << temp->BookedTName << "," << temp->BookedTID << ","
-                << temp->BookedDest << "," << temp->BookedSource << ","
+                << temp->BookedSource << "," << temp->BookedDest << ","
                 << temp->BookedDate << "," << temp->DeptTime << ","
                 << temp->ArrTime << "," << temp->BookedSeatNum << ","
                 << temp->Price << "," << temp->BookedClass << "\n";
         temp = temp->next;
     }
-    outFile.close();
 
+<<<<<<< HEAD
     delete delNode;
     cout << "Debug: Tickets and seat details updated after deletion.\n";
 }
@@ -428,4 +447,10 @@ void admin()
         }
     }
 }
+=======
+    outFile.close();
+    cout << "Debug: Tickets.txt updated after editing.\n";
+}
+
+>>>>>>> de3e24444e3a0872bdc6601e2724f1f263bfd500
 
