@@ -788,8 +788,8 @@ void editDetails()
         temp = temp->next;
     }
 
-    delete delNode;
-    cout << "Debug: Tickets and seat details updated after deletion.\n";
+    outFile.close();
+    cout << "Debug: Tickets.txt updated after editing.\n";
 }
 
 void admin()
@@ -859,9 +859,6 @@ void admin()
             cout << "\t\t\t\t\tInvalid credentials. Please login again.\n";
         }
     }
-}
-outFile.close();
-cout << "Debug: Tickets.txt updated after editing.\n";
 }
 
 void addRoute(string src, string dest)
