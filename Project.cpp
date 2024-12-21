@@ -424,54 +424,6 @@ void reserveTicket()
     saveTicketToFile(obj);
 }
 
-void loadTicketsFromFile()
-{
-    ifstream inFile("Tickets.txt");
-    if (!inFile.is_open())
-    {
-        cout << "No previously saved tickets found.\n";
-        return;
-    }
-
-    string line;
-    while (getline(inFile, line))
-    {
-        stringstream ss(line);
-        node *ticket = new node();
-
-        getline(ss, line, ',');
-        ticket->ticketID = stoi(line);           // Ticket ID
-        getline(ss, ticket->Name, ',');          // Name
-        getline(ss, ticket->Age, ',');           // Age
-        getline(ss, ticket->NIC, ',');           // NIC
-        getline(ss, ticket->Contact, ',');       // Contact
-        getline(ss, ticket->BookedTName, ',');   // Train Name
-        getline(ss, ticket->BookedTID, ',');     // Train ID
-        getline(ss, ticket->BookedSource, ',');  // Source
-        getline(ss, ticket->BookedDest, ',');    // Destination
-        getline(ss, ticket->BookedDate, ',');    // Date of Booking
-        getline(ss, ticket->DeptTime, ',');      // Departure Time
-        getline(ss, ticket->ArrTime, ',');       // Arrival Time
-        getline(ss, ticket->BookedSeatNum, ','); // Seat Number
-        getline(ss, line, ',');
-        ticket->Price = stof(line);            // Price
-        getline(ss, ticket->BookedClass, ','); // Train Class
-
-        // Add the ticket to linked list
-        if (head == NULL)
-        {
-            head = ticket;
-            tail = ticket;
-        }
-        else
-        {
-            tail->next = ticket;
-            tail = ticket;
-        }
-    }
-    inFile.close();
-}
-
 void display()
 {
     cout << endl
@@ -565,4 +517,69 @@ void viewTicket()
         cout << "\t\t\t\t\tNo Matching Booking Found.\n";
     }
 }
+void editDetails()
+{
+    string fName, lName;
+    int search;
+    bool found = false;
+
+    cout << "\t\t\t\t\tEDIT DETAILS:" << endl
+         << endl;
+    cout << "\t\t\t\t\tEnter ticket ID: ";
+    cin >> search;
+
+    node *temp = head;
+
+    while (temp != NULL)
+    {
+        if (temp->ticketID == search)
+        {
+            found = true;
+            cout << "\t\t\t\t\tEnter First Name of Passenger: ";
+            cin >> fName;
+            cout << "\t\t\t\t\tEnter Last Name of Passenger: ";
+            cin >> lName;
+            temp->Name = fName + " " + lName;
+
+            cout << "\t\t\t\t\tEnter Age: ";
+            cin >> temp->Age;
+
+            cout << "\t\t\t\t\tEnter CNIC Number: ";
+            cin >> temp->NIC;
+
+            cout << "\t\t\t\t\tEnter Contact Number: ";
+            cin >> temp->Contact;
+
+            cout << "\n\t\t\t\t\tTicket details updated successfully!" << endl;
+            break;
+        }
+        temp = temp->next;
+    }
+
+    if (!found)
+    {
+        cout << "\n\t\t\t\t\tTicket ID not found!" << endl;
+        return;
+    }
+
+    // Rewrite Tickets.txt with updated linked list
+    ofstream outFile("Tickets.txt", ios::trunc);
+    temp = head; // Reset temp to the head of the list
+
+    while (temp != NULL)
+    {
+        outFile << temp->ticketID << "," << temp->Name << "," << temp->Age << ","
+                << temp->NIC << "," << temp->Contact << ","
+                << temp->BookedTName << "," << temp->BookedTID << ","
+                << temp->BookedSource << "," << temp->BookedDest << ","
+                << temp->BookedDate << "," << temp->DeptTime << ","
+                << temp->ArrTime << "," << temp->BookedSeatNum << ","
+                << temp->Price << "," << temp->BookedClass << "\n";
+        temp = temp->next;
+    }
+
+    outFile.close();
+    cout << "Debug: Tickets.txt updated after editing.\n";
+}
+
 
