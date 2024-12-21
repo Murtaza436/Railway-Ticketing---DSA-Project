@@ -139,7 +139,46 @@ void Payment()
     }
     cout << "\n\n\t\t\t\t\t";
 }
-
+void trainSort()
+{
+    string temp, temp2, temp3, temp4, temp5, temp6, temp7, temp9;
+    int temp8, j;
+    for (int i = 0; i < noOfTrains; i++)
+    {
+        temp = availTrains[i].arriveTime;
+        temp2 = availTrains[i].departTime;
+        temp3 = availTrains[i].TClasses;
+        temp4 = availTrains[i].TDate;
+        temp5 = availTrains[i].TDest;
+        temp6 = availTrains[i].TID;
+        temp7 = availTrains[i].TName;
+        temp8 = availTrains[i].TSeats;
+        temp9 = availTrains[i].TSource;
+        j = i - 1;
+        while (j >= 0 && availTrains[j].TName > temp7)
+        {
+            availTrains[j + 1].arriveTime = availTrains[j].arriveTime;
+            availTrains[j + 1].departTime = availTrains[j].departTime;
+            availTrains[j + 1].TClasses = availTrains[j].TClasses;
+            availTrains[j + 1].TDate = availTrains[j].TDate;
+            availTrains[j + 1].TDest = availTrains[j].TDest;
+            availTrains[j + 1].TID = availTrains[j].TID;
+            availTrains[j + 1].TName = availTrains[j].TName;
+            availTrains[j + 1].TSeats = availTrains[j].TSeats;
+            availTrains[j + 1].TSource = availTrains[j].TSource;
+            j--;
+        }
+        availTrains[j + 1].arriveTime = temp;
+        availTrains[j + 1].departTime = temp2;
+        availTrains[j + 1].TClasses = temp3;
+        availTrains[j + 1].TDate = temp4;
+        availTrains[j + 1].TDest = temp5;
+        availTrains[j + 1].TID = temp6;
+        availTrains[j + 1].TName = temp7;
+        availTrains[j + 1].TSeats = temp8;
+        availTrains[j + 1].TSource = temp9;
+    }
+}
 TrainBST *insertTrain(TrainBST *root, trains t)
 {
     if (!root)
