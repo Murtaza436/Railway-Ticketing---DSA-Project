@@ -174,6 +174,158 @@ void searchTrainByName(TrainBST *root, string name)
     else
         searchTrainByName(root->right, name);
 }
+
+string SeatChoose()
+{
+    fstream Seat;
+    int count = 0;
+    string line;
+    SeatRecord Seats[10];
+    Seat.open("Seat_Details.txt");
+    while (getline(Seat, line))
+    {
+        count++;
+    }
+    Seat.close();
+    Seat.open("Seat_Details.txt");
+    for (int j = 0; j < count; j++)
+    {
+        string line1;
+        getline(Seat, line1);
+        size_t delimit = line1.find('-');
+        Seats[j].RowA = line1.substr(0, delimit);
+        size_t nextDelimit = line1.find('-', delimit + 1);
+        Seats[j].RowB = line1.substr(delimit + 1, nextDelimit - delimit - 1);
+        Seats[j].RowC = line1.substr(nextDelimit + 1);
+    }
+    Seat.close();
+
+    string RowName, SeatNum, FinalSeatNum;
+    bool Flag = false;
+    cout << "\n\n\t\t\t\t\t\t\tA" << "\t" << " B" << "\t" << " C" << "\t\n";
+    for (int i = 0; i < 10; i++)
+    {
+        cout << "\n\n\t\t\t\t\t\t\t" << Seats[i].RowA << "\t" << Seats[i].RowB << "\t" << Seats[i].RowC << "\t\n";
+    }
+
+    cout << "\n\n\t\t\t\t\t\t  ======================================\n";
+
+    while (true)
+    {
+        cout << "\n\n\t\t\t\t\tEnter the row name that you chose: ";
+        cin >> RowName;
+        if (RowName != "A" && RowName != "B" && RowName != "C")
+        {
+            cout << "\n\n\t\t\t\t\tInvalid row, please try again. ";
+        }
+        else
+            break;
+    }
+
+    while (true)
+    {
+        cout << "\n\n\t\t\t\t\tEnter the seat number that you chose: ";
+        cin >> SeatNum;
+        if (SeatNum == "XX")
+        {
+            cout << "\n\n\t\t\t\t\tInvalid seat, please try again! \n";
+            continue;
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            if (RowName == "A" && SeatNum == Seats[i].RowA)
+            {
+                Seats[i].RowA = "XX"; // Mark seat as reserved
+                Flag = true;
+                cout << "Debug: Reserved Seat A" << SeatNum << endl;
+            }
+            else if (RowName == "B" && SeatNum == Seats[i].RowB)
+            {
+                Seats[i].RowB = "XX";
+                Flag = true;
+                cout << "Debug: Reserved Seat B" << SeatNum << endl;
+            }
+            else if (RowName == "C" && SeatNum == Seats[i].RowC)
+            {
+                Seats[i].RowC = "XX";
+                Flag = true;
+                cout << "Debug: Reserved Seat C" << SeatNum << endl;
+            }
+        }
+
+        if (Flag)
+            break;
+        else
+            cout << "\n\n\t\t\t\t\tSeat number not found, please try again. \n";
+    }
+
+    FinalSeatNum = RowName + SeatNum;
+    ofstream Del("Seat_Details.txt", ios::trunc);
+    for (int i = 0; i < 10; i++)
+    {
+        Del << Seats[i].RowA << "-" << Seats[i].RowB << "-" << Seats[i].RowC << "-\n";
+    }
+    Del.close();
+    cout << "Debug: Seat details file updated.\n";
+
+    Del.close();
+    return FinalSeatNum;
+}
+
+void iniTrain()
+{
+    availTrains[0].TName = "Shalimar Express";
+    availTrains[0].TID = "SHE753";
+    availTrains[0].TSource = "Karachi";
+    availTrains[0].TDest = "Lahore";
+    availTrains[0].TDate = "24-Dec-2020";
+    availTrains[0].arriveTime = "20:00 (8:00 PM)";
+    availTrains[0].departTime = "16:40 (4:40 PM)";
+    availTrains[0].TClasses = "Economy, AC Lower, AC Business";
+    availTrains[0].TSeats = 30;
+
+    availTrains[1].TName = "Karakoram Express";
+    availTrains[1].TID = "KKE694";
+    availTrains[1].TSource = "Karachi";
+    availTrains[1].TDest = "Faisalabad";
+    availTrains[1].TDate = "26-Dec-2020";
+    availTrains[1].arriveTime = "08:00 (8:00 AM)";
+    availTrains[1].departTime = "04:40 (4:40 AM)";
+    availTrains[1].TClasses = "Economy, AC Lower, AC Business";
+    availTrains[1].TSeats = 30;
+
+    availTrains[2].TName = "Green Line Express";
+    availTrains[2].TID = "GLE400";
+    availTrains[2].TSource = "Karachi";
+    availTrains[2].TDest = "Islamabad";
+    availTrains[2].TDate = "05-Jan-2021";
+    availTrains[2].arriveTime = "12:00 (12:00 PM)";
+    availTrains[2].departTime = "10:00 (10:00 AM)";
+    availTrains[2].TClasses = "Economy, AC Lower, AC Business";
+    availTrains[2].TSeats = 30;
+
+    availTrains[3].TName = "Tezgam Express";
+    availTrains[3].TID = "TEZ123";
+    availTrains[3].TSource = "Karachi";
+    availTrains[3].TDest = "Faisalabad";
+    availTrains[3].TDate = "01-Jan-2021";
+    availTrains[3].arriveTime = "15:00 (03:00 PM)";
+    availTrains[3].departTime = "9:00 (09:00 AM)";
+    availTrains[3].TClasses = "Economy, AC Lower, AC Business";
+    availTrains[3].TSeats = 30;
+
+    availTrains[4].TName = "Karachi Express";
+    availTrains[4].TID = "KHE123";
+    availTrains[4].TSource = "Karachi";
+    availTrains[4].TDest = "Lahore";
+    availTrains[4].TDate = "31-Dec-2000";
+    availTrains[4].arriveTime = "12:00 (12:00 AM)";
+    availTrains[4].departTime = "12:00 (09:00 PM)";
+    availTrains[4].TClasses = "Economy, AC Lower, AC Business";
+    availTrains[4].TSeats = 30;
+}
+
 void saveTicketToFile(node *ticket)
 {
     ofstream outFile("Tickets.txt", ios::app);
