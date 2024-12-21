@@ -349,7 +349,6 @@ void editDetails()
         temp = temp->next;
     }
 
-<<<<<<< HEAD
     delete delNode;
     cout << "Debug: Tickets and seat details updated after deletion.\n";
 }
@@ -447,10 +446,89 @@ void admin()
         }
     }
 }
-=======
     outFile.close();
     cout << "Debug: Tickets.txt updated after editing.\n";
 }
+string trainFill()
+{
+    bool check = false;
+    bool check2 = false;
+    trainCheck = true;
 
->>>>>>> de3e24444e3a0872bdc6601e2724f1f263bfd500
+    // Loop until valid departure and arrival cities are entered
+    while (true)
+    {
+        cout << "\t\t\t\t\tEnter Your Departure City: ";
+        cin >> Source;
+        cin.ignore();
+        cout << "\t\t\t\t\tEnter Your Arrival City: ";
+        cin >> Dest;
+        cin.ignore();
+
+        trainSort();
+
+        cout << "\n\n\t\t\t\t\tAVAILABLE TRAINS ON THAT DAY IN THIS ROUTE ARE AS FOLLOWS (IF ANY): \n\n"
+             << endl;
+
+        for (int i = 0; i < noOfTrains; i++)
+        {
+            if (availTrains[i].TSource == Source && availTrains[i].TDest == Dest)
+            {
+                cout << "\t\t\t\t\tTrain Name: " << availTrains[i].TName << endl;
+                cout << "\t\t\t\t\tTrain ID: " << availTrains[i].TID << endl;
+                cout << "\t\t\t\t\tTrain Source: " << availTrains[i].TSource << endl;
+                cout << "\t\t\t\t\tTrain Destination: " << availTrains[i].TDest << endl;
+                cout << "\t\t\t\t\tTrain Departure Date: " << availTrains[i].TDate << endl;
+                cout << "\t\t\t\t\tTrain Arrival Time: " << availTrains[i].arriveTime << endl;
+                cout << "\t\t\t\t\tTrain Departure Time: " << availTrains[i].departTime << endl;
+                cout << "\t\t\t\t\tAvailable Train Classes: " << availTrains[i].TClasses << endl;
+                cout << "\t\t\t\t\tSeats Available: " << availTrains[i].TSeats << endl;
+                cout << endl
+                     << endl;
+                check = true;
+            }
+        }
+
+        if (!check)
+        {
+            cout << "\t\t\t\t\tNo trains available on this route. Please re-enter your details. \n";
+        }
+        else
+        {
+            break; // Exit the loop if trains are found
+        }
+    }
+
+    // Loop until a valid train ID is entered
+    while (true)
+    {
+        cout << "\t\t\t\t\tInput Train ID that you wish to book: ";
+        cin >> BookedID;
+
+        for (int i = 0; i < noOfTrains; i++)
+        {
+            if (BookedID == availTrains[i].TID)
+            {
+                TName = availTrains[i].TName;
+                DTime = availTrains[i].departTime;
+                ATime = availTrains[i].arriveTime;
+                Date = availTrains[i].TDate;
+                availTrains[i].TSeats--; // Reduce available seats
+
+                cout << "Debug: Selected Train -> Name: " << TName
+                     << ", Date: " << Date
+                     << ", Departure: " << DTime
+                     << ", Arrival: " << ATime << endl;
+
+                check2 = true;
+                return BookedID;
+            }
+        }
+
+        if (!check2)
+        {
+            cout << "\t\t\t\t\tInput correct train ID! \n";
+        }
+    }
+}
 
